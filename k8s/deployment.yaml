@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment-621295
+  namespace: argocd-621295
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-621295
+  template:
+    metadata:
+      labels:
+        app: webapp-621295
+    spec:
+      serviceAccountName: webapp-sa-621295
+      containers:
+        - name: webapp-container-621295
+          image: admin621295/621295-webapp:latest  # ✅ Updated image name
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: webapp-config-621295
+            - secretRef:
+                name: webapp-secret-621295
+          volumeMounts:
+            - name: webapp-pvc-vol
+              mountPath: /data
+      volumes:
+        - name: webapp-pvc-vol
+          persistentVolumeClaim:
+            claimName: webapp-pvc-621295
