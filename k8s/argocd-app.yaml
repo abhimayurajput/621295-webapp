@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: 621295-webapp-app
+  namespace: argocd-621295  # Namespace where Argo CD is installed
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/abhimayurajput/621295-webapp.git
+    targetRevision: main
+    path: main/k8s  # Path to your k8s folder in Git repo
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd-621295
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
